@@ -4,8 +4,13 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.MotionBlur;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Test extends Application {
@@ -13,6 +18,8 @@ public class Test extends Application {
 	Stage stage;
 	Scene scene1, scene2;
 	Button button1, button2;	
+	
+	
 	
 	public static void main(String[] args) {
 		
@@ -44,15 +51,28 @@ public class Test extends Application {
 		VBox layout1 = new VBox(30);
 		layout1.getChildren().addAll(button1, label1);
 		scene1 = new Scene(layout1, 250, 250);
-				
-		StackPane layout2 = new StackPane();
-		layout2.getChildren().addAll(label2, button2);
+		
+		MotionBlur motionBlur = new MotionBlur();
+		motionBlur.setRadius(30);
+		motionBlur.setAngle(-15.0);
+
+		Text text = new Text();
+		text.setX(20.0);
+		text.setY(100.0);
+		text.setText("Motion!");
+		text.setFill(Color.web("0x3b596d"));
+		text.setFont(Font.font(null, FontWeight.BOLD, 60));
+		text.setEffect(motionBlur);
+		 
+		VBox layout2 = new VBox();
+		layout2.getChildren().addAll(label2, button2, text);
 		scene2 = new Scene(layout2, 300, 300);
 		
 		stage.setScene(scene1);
 		stage.setTitle("Test");
 		stage.show();
-		
+
+
 		
 	}
 

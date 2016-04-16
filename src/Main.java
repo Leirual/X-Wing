@@ -13,14 +13,20 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.MotionBlur;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Main extends Application{
 
+	private File file = new File("SaveGame.txt");
 	Scene scene1, scene2, scene3, scene4;
-	Button button1, button2, button3, button4, button5, button6;
+	Button button1, button2, button3, button4, button5, button6, button7;
 //-------------------------------------------------------------------------------------------------------	
 	public static void main(String[] args) throws IOException {
 		
@@ -68,8 +74,8 @@ public class Main extends Application{
 		button3.setText("Save Game");
 		button3.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event){
-				File file = new File("SaveGame.txt");
 
+				file.deleteOnExit();
 				if(file.exists()){
 					try{
 						FileWriter writer = new FileWriter(file);
@@ -126,9 +132,13 @@ public class Main extends Application{
 				stage.setScene(scene1);
 			}
 		});
+//-------------------------------------------------------------------------------------------------------				
+		button7 = new Button();
+		button7.setText("Open new window");
+		button7.setOnAction(e->WindowBox.Display("I'm a box!", "Yaaay!"));
 //-------------------------------------------------------------------------------------------------------		
 		VBox layout1 = new VBox(20);		// a layout that stacks thing one on top of a nother with a spacing
-		layout1.getChildren().addAll(label1, button1, button2, button3);		// adding a "child" to the "stage" (a button to the window layout)
+		layout1.getChildren().addAll(label1, button1, button2, button3, button7);		// adding a "child" to the "stage" (a button to the window layout)
 		scene1 = new Scene(layout1, 200, 200);		// creating a Scene
 //-------------------------------------------------------------------------------------------------------		
 		StackPane layout2 = new StackPane();		// a layout that stacks thing one on top of a nother with a spacing
@@ -145,6 +155,7 @@ public class Main extends Application{
 //-------------------------------------------------------------------------------------------------------	
 		stage.setScene(scene1);		// creating main window
 		stage.setTitle("X-wing miniatures game");
-		stage.show();
+		stage.show();	
+
 	}	
 }
