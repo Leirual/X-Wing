@@ -1,5 +1,5 @@
 
-public class Ship {
+public class Ship extends Skills{
 
 	public int power;
 	public int agility;

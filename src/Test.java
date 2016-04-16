@@ -15,6 +15,7 @@ public class Test extends Application {
 	Button button1, button2;	
 	
 	public static void main(String[] args) {
+		
 		launch(args);
 	}
 
