@@ -27,6 +27,7 @@ public class Main extends Application{
 	private File file = new File("SaveGame.txt");
 	Scene scene1, scene2, scene3, scene4;
 	Button button1, button2, button3, button4, button5, button6, button7;
+	int saveCount = 0;
 //-------------------------------------------------------------------------------------------------------	
 	public static void main(String[] args) throws IOException {
 		
@@ -55,17 +56,18 @@ public class Main extends Application{
 		button2.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event){
 				try {
-		            FileReader reader = new FileReader("SaveGame.txt");
-		            BufferedReader bReader = new BufferedReader(reader);
+		            FileReader reader = new FileReader(file);	// this reads the file
+		            BufferedReader bReader = new BufferedReader(reader);	// wrapping the fileReader in a buffer
 		            String line;
-		            while ((line = bReader.readLine()) != null) {
+		            while ((line = bReader.readLine()) != null) {	// printing out text if there is one
 		                System.out.println(line);
 		            }
 		            reader.close();
-		            stage.setScene(scene3);
+		            stage.setScene(scene3);		// setting new scene with load info
 		        } catch (IOException e) {
 		        	System.out.println("No games to load");
-		        }				
+		        }
+				label3.setText("Loaded game nr. " + saveCount);
 			}
 		});
 //-------------------------------------------------------------------------------------------------------
@@ -74,13 +76,13 @@ public class Main extends Application{
 		button3.setText("Save Game");
 		button3.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event){
-
-				file.deleteOnExit();
+				saveCount++;
+				file.deleteOnExit();		// this will delete the file after the program is done using it
 				if(file.exists()){
 					try{
 						FileWriter writer = new FileWriter(file);
 						BufferedWriter bWriter = new BufferedWriter(writer);		
-						bWriter.write("Replaced old file");
+						bWriter.write("Save nr." + saveCount);
 						bWriter.close();
 					}
 					catch(IOException e){
@@ -97,14 +99,14 @@ public class Main extends Application{
 					try{
 						FileWriter writer = new FileWriter(file);
 						BufferedWriter bWriter = new BufferedWriter(writer);		
-						bWriter.write("Saved\n1st\ngame");
+						bWriter.write("Saved 1st game");
 						bWriter.close();
 					}
 					catch(IOException e){
 						e.printStackTrace();
 					}				
 				}
-				
+				label4.setText("Saved game nr. " + saveCount);
 				stage.setScene(scene4);
 			}
 		});
@@ -137,13 +139,13 @@ public class Main extends Application{
 		button7.setText("Open new window");
 		button7.setOnAction(e->WindowBox.Display("I'm a box!", "Yaaay!"));
 //-------------------------------------------------------------------------------------------------------		
-		VBox layout1 = new VBox(20);		// a layout that stacks thing one on top of a nother with a spacing
+		VBox layout1 = new VBox(20);		// a layout that stacks things one on top of another with a spacing
 		layout1.getChildren().addAll(label1, button1, button2, button3, button7);		// adding a "child" to the "stage" (a button to the window layout)
 		scene1 = new Scene(layout1, 200, 200);		// creating a Scene
 //-------------------------------------------------------------------------------------------------------		
-		StackPane layout2 = new StackPane();		// a layout that stacks thing one on top of a nother with a spacing
-		layout2.getChildren().addAll(label2, button4);		// adding a "child" to the "stage" (a button to the window layout)
-		scene2 = new Scene(layout2, 400, 200);		// creating a Scene
+		StackPane layout2 = new StackPane();		
+		layout2.getChildren().addAll(label2, button4);		
+		scene2 = new Scene(layout2, 400, 200);		
 //-------------------------------------------------------------------------------------------------------		
 		VBox layout3 = new VBox(5);
 		layout3.getChildren().addAll(label3, button5);
