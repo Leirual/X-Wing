@@ -30,38 +30,70 @@ import javafx.stage.Stage;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
-public class Main extends Application{
+public class MainUI extends Application{
 
-	Stage window;
-	Scene scene0, scene1, scene2, scene3, scene4;
-	Button button1, button2, button3, button4, button5, button6, button7, button8, loginButton;
-	private File file = new File("SaveGame.txt");
-	int saveCount = 0;
-//-------------------------------------------------------------------------------------------------------	
+	//public static Main game;
+	
+	Stage mainWindow;
+	Scene loginScene, mainScene, loadScene, saveScene, rebelScene, imperialScene, scumScene;
+	Button newGameButton, loadGameButton, saveGameButton, backFromLoadButton, backFromSaveButton, newWindowButton, closeButton, loginButton;
+	private File file = new File("Save.txt");
+	Label label3;
+	
+	public static int saveCount = 0;
+	//public SaverClass saver;
+	
+
+	
+
+	//-------------------------------------------------------------------------------------------------------	
 	public static void main(String[] args) throws IOException {
-		
 		launch(args);
 	}
 
 	// main Javafx code
 	public void start(Stage stage) throws Exception {
-		window = stage;					// creating main window using an external variable
+		mainWindow = stage;					// creating main window using an external variable
 //-------------------------------------------------------------------------------------------------------	
 		Label label2 = new Label("The Game");
 		Label label3 = new Label("Game Loaded");
 		Label label4 = new Label("Game Saved");
+		Label buildListRebels = new Label("Build your list");
+		Label buildListImperial = new Label("Build your list");
+		Label buildListScum = new Label("Build your list");
 //-------------------------------------------------------------------------------------------------------			
-		button1 = new Button("New Game");			// creating something to click :) - you can define it straight away in the brackets or define it in a setText method
-		button1.setOnAction(new EventHandler<ActionEvent>() {	// an anonymous inner class for handling events corresponding to this button (otherwise it should only be THIS in the bracket)
+		newGameButton = new Button("New Game");			// creating something to click :) - you can define it straight away in the brackets or define it in a setText method
+		newGameButton.setOnAction(new EventHandler<ActionEvent>() {	// an anonymous inner class for handling events corresponding to this button (otherwise it should only be THIS in the bracket)
 			public void handle(ActionEvent event){
-				stage.setScene(scene2);
+				String faction = FactionWindow.Display("New Game", "Choose your faction");
+				switch(faction){
+				case "rebels":
+					stage.setScene(rebelScene);
+					break;
+				case "imperials":
+					stage.setScene(imperialScene);
+					break;
+				case "scum":
+					stage.setScene(scumScene);
+					break;
+				default:
+					stage.setScene(mainScene);
+					break;
+				}
 			}
 		});
 //-------------------------------------------------------------------------------------------------------
 // FILE LOADER
-		button2 = new Button("Load Game");
-		button2.setOnAction(new EventHandler<ActionEvent>() {
+		loadGameButton = new Button("Load Game");
+		loadGameButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event){
+				/*try {
+					saver.load();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}*/
+				
 				try {
 		            FileReader reader = new FileReader(file);	// this reads the file
 		            BufferedReader bReader = new BufferedReader(reader);	// wrapping the fileReader in a buffer
@@ -71,7 +103,7 @@ public class Main extends Application{
 		                label3.setText("Loaded " + line);
 		            }
 		            reader.close();
-		            stage.setScene(scene3);		// setting new scene with load info
+		            stage.setScene(loadScene);		// setting new scene with load info
 		        } catch (IOException e) {
 		        	System.out.println("No games to load");
 		        }
@@ -79,11 +111,18 @@ public class Main extends Application{
 		});
 //-------------------------------------------------------------------------------------------------------
 // FILE SAVER / REWRITER
-		button3 = new Button("Save Game");
-		button3.setOnAction(new EventHandler<ActionEvent>() {
+		saveGameButton = new Button("Save Game");
+		saveGameButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event){
 				saveCount++;
-				//file.deleteOnExit();		// this will delete the file after the program is done using it
+				
+				/*try {
+					saver.save();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}*/
+				
 				if(file.exists()){
 					try{
 						FileWriter writer = new FileWriter(file);
@@ -112,34 +151,35 @@ public class Main extends Application{
 						e.printStackTrace();
 					}				
 				}
+				
 				label4.setText("Saved game nr. " + saveCount);
-				stage.setScene(scene4);
+				stage.setScene(saveScene);
 			}
 		});
 //-------------------------------------------------------------------------------------------------------			
-		button4 = new Button("Return to Main Menu");
+/*		button4 = new Button("Return to Main Menu");
 		button4.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event){
 				stage.setScene(scene1);
 			}
-		});
+		});*/
 //-------------------------------------------------------------------------------------------------------		
-		button5 = new Button("Return to Main Menu");
-		button5.setOnAction(new EventHandler<ActionEvent>() {
+		backFromLoadButton = new Button("Return to Main Menu");
+		backFromLoadButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event){
-				stage.setScene(scene1);
+				stage.setScene(mainScene);
 			}
 		});
 //-------------------------------------------------------------------------------------------------------		
-		button6 = new Button("Return to Main Menu");
-		button6.setOnAction(new EventHandler<ActionEvent>() {
+		backFromSaveButton = new Button("Return to Main Menu");
+		backFromSaveButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event){
-				stage.setScene(scene1);
+				stage.setScene(mainScene);
 			}
 		});
 //-------------------------------------------------------------------------------------------------------				
-		button7 = new Button("Open new window");
-		button7.setOnAction(e-> {
+		newWindowButton = new Button("Open new window");
+		newWindowButton.setOnAction(e-> {
 			boolean result = ConfirmBox.Display("I'm a box!", "Are you smart enough?");
 			if(result==true){
 				stage.setTitle("Smarty pants...");
@@ -149,8 +189,8 @@ public class Main extends Application{
 			}
 		});
 //-------------------------------------------------------------------------------------------------------		
-		button8 = new Button("Close");
-		button8.setOnAction(e->closeProgram());
+		closeButton = new Button("Close");
+		closeButton.setOnAction(e->closeProgram());
 //-------------------------------------------------------------------------------------------------------		
 		GridPane grid = new GridPane();				// making a GridPane login screen
 		grid.setPadding(new Insets(20,10,0,10));
@@ -168,8 +208,8 @@ public class Main extends Application{
 		{
 			String loginString = loginInput.getText();			// checking to see if the login and password are correct
 			String passwordString = passwordInput.getText();
-			if(loginString.toLowerCase().equals("kris") && passwordString.equals("banan")){
-				stage.setScene(scene1);
+			if(loginString.toLowerCase().equals("k") && passwordString.equals("a")){
+				stage.setScene(mainScene);
 			}
 			else{
 				Alert alert = new Alert(AlertType.ERROR);
@@ -188,39 +228,47 @@ public class Main extends Application{
 		GridPane.setConstraints(loginButton, 0, 2);
 		grid.getChildren().addAll(login, loginInput, password, passwordInput, loginButton);
 		
-		scene0 = new Scene(grid, 400, 400);
+		loginScene = new Scene(grid, 400, 400);
 //-------------------------------------------------------------------------------------------------------			
 		VBox leftMenu = new VBox(20);		// a layout that stacks things one on top of another with a spacing
-		leftMenu.getChildren().addAll(button1, button2, button3);		// adding a "child" to the "stage" (a button to the window layout)
+		leftMenu.getChildren().addAll(newGameButton, loadGameButton, saveGameButton);		// adding a "child" to the "stage" (a button to the window layout)
 		
 		HBox topMenu = new HBox(20);
-		topMenu.getChildren().addAll(label1, button7, button8);
+		topMenu.getChildren().addAll(label1, newWindowButton, closeButton);
 		
 		BorderPane borderPane = new BorderPane();		// making a BorderPane main menu
 		borderPane.setLeft(leftMenu);
 		borderPane.setTop(topMenu);		
 		
-		scene1 = new Scene(borderPane, 400, 400);
+		mainScene = new Scene(borderPane, 400, 400);
 //-------------------------------------------------------------------------------------------------------		
-		StackPane layout2 = new StackPane();		
-		layout2.getChildren().addAll(label2, button4);		
-		scene2 = new Scene(layout2, 400, 200);		
+		VBox rebelLayout = new VBox();		
+		rebelLayout.getChildren().addAll(buildListRebels);		
+		rebelScene = new Scene(rebelLayout, 400, 200);
+		
+		VBox imperialLayout = new VBox();		
+		imperialLayout.getChildren().addAll(buildListImperial);		
+		imperialScene = new Scene(imperialLayout, 400, 200);
+		
+		VBox scumLayout = new VBox();		
+		scumLayout.getChildren().addAll(buildListScum);		
+		scumScene = new Scene(scumLayout, 400, 200);
 //-------------------------------------------------------------------------------------------------------		
 		VBox layout3 = new VBox(5);
-		layout3.getChildren().addAll(label3, button5);
-		scene3 = new Scene(layout3, 500, 50);
+		layout3.getChildren().addAll(label3, backFromLoadButton);
+		loadScene = new Scene(layout3, 500, 50);
 //-------------------------------------------------------------------------------------------------------		
 		VBox layout4 = new VBox(5);
-		layout4.getChildren().addAll(label4, button6);
-		scene4 = new Scene(layout4, 500, 500);
+		layout4.getChildren().addAll(label4, backFromSaveButton);
+		saveScene = new Scene(layout4, 500, 500);
 //-------------------------------------------------------------------------------------------------------	
-		window.setScene(scene0);		// setting up the main window
-		window.setTitle("X-wing miniatures game");
-		window.setOnCloseRequest(e-> {
+		mainWindow.setScene(loginScene);		// setting up the main window
+		mainWindow.setTitle("X-wing miniatures game");
+		mainWindow.setOnCloseRequest(e-> {
 			e.consume();				// taking care of a java event on our own (stopping it from continuing)
 			closeProgram();
 		});
-		window.show();	
+		mainWindow.show();	
 	}
 
 //-------------------------------------------------------------------------------------------------------		
@@ -257,7 +305,15 @@ public class Main extends Application{
 				}				
 			}
 			System.out.println("Saved game nr. " + saveCount);
-			window.close();
+			mainWindow.close();
 		}
 	}
+	
+/*	public static int getSaveCount() {
+		return saveCount;
+	}
+
+	public static void setSaveCount(int saveCount) {
+		MainUI.saveCount = saveCount;
+	}*/
 }

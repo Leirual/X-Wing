@@ -32,11 +32,12 @@ public class WindowBox {
 		layout.getChildren().addAll(label, closeButton);
 		layout.setAlignment(Pos.CENTER);
 		
-		Scene scene = new Scene(layout, 200, 200);
 		
-		window.setScene(scene);
+		
+		
+		Scene factionScene = new Scene(layout, 200, 200);
+		window.setScene(factionScene);
 		window.showAndWait();	
-		
 		
 	}
 	
