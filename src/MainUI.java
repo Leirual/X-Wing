@@ -58,9 +58,9 @@ public class MainUI extends Application{
 		Label label2 = new Label("The Game");
 		Label label3 = new Label("Game Loaded");
 		Label label4 = new Label("Game Saved");
-		Label buildListRebels = new Label("Build your list");
-		Label buildListImperial = new Label("Build your list");
-		Label buildListScum = new Label("Build your list");
+		Label buildListRebels = new Label("Build your Rebel list");
+		Label buildListImperial = new Label("Build your Imperial list");
+		Label buildListScum = new Label("Build your Scum list");
 //-------------------------------------------------------------------------------------------------------			
 		newGameButton = new Button("New Game");			// creating something to click :) - you can define it straight away in the brackets or define it in a setText method
 		newGameButton.setOnAction(new EventHandler<ActionEvent>() {	// an anonymous inner class for handling events corresponding to this button (otherwise it should only be THIS in the bracket)
@@ -211,7 +211,7 @@ public class MainUI extends Application{
 			if(loginString.toLowerCase().equals("k") && passwordString.equals("a")){
 				stage.setScene(mainScene);
 			}
-			else{
+			else{												// creating an error box
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Warning");
                 alert.setHeaderText("Login");
@@ -221,7 +221,7 @@ public class MainUI extends Application{
 		});
 		Label label1 = new Label("Welcome " + loginInput.getText() + ", man!");		// LABEL is a text the user can't interact with
 		
-		GridPane.setConstraints(login, 0, 0);		// must be accessed in a static way (through the class, not the object)
+		GridPane.setConstraints(login, 0, 0);		// creating a gridpane - must be accessed in a static way (through the class, not the object)
 		GridPane.setConstraints(loginInput, 1, 0);
 		GridPane.setConstraints(password, 0, 1);
 		GridPane.setConstraints(passwordInput, 1, 1);
@@ -242,7 +242,7 @@ public class MainUI extends Application{
 		
 		mainScene = new Scene(borderPane, 400, 400);
 //-------------------------------------------------------------------------------------------------------		
-		VBox rebelLayout = new VBox();		
+		VBox rebelLayout = new VBox();
 		rebelLayout.getChildren().addAll(buildListRebels);		
 		rebelScene = new Scene(rebelLayout, 400, 200);
 		
