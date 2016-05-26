@@ -14,6 +14,8 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.MotionBlur;
 import javafx.scene.input.SwipeEvent;
@@ -65,21 +67,7 @@ public class MainUI extends Application{
 		newGameButton = new Button("New Game");			// creating something to click :) - you can define it straight away in the brackets or define it in a setText method
 		newGameButton.setOnAction(new EventHandler<ActionEvent>() {	// an anonymous inner class for handling events corresponding to this button (otherwise it should only be THIS in the bracket)
 			public void handle(ActionEvent event){
-				String faction = FactionWindow.Display("New Game", "Choose your faction");
-				switch(faction){
-				case "rebels":
-					stage.setScene(rebelScene);
-					break;
-				case "imperials":
-					stage.setScene(imperialScene);
-					break;
-				case "scum":
-					stage.setScene(scumScene);
-					break;
-				default:
-					stage.setScene(mainScene);
-					break;
-				}
+				FactionWindow.Display("New Game", "Choose your faction");
 			}
 		});
 //-------------------------------------------------------------------------------------------------------
