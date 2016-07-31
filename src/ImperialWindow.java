@@ -10,42 +10,65 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class RebelWindow {
+public class ImperialWindow {
 	
-	static String treeItemSelected;		// a static, temporary value, changed by clicking items from the tree
-	static String listItemSelected;		// a static, temporary value, changed by clicking items from the list
+	static String treeItemSelected;
+	static String listItemSelected;
 //-------------------------------------------------------------------------------------------------------		
-	public static void Display(String title, String message){
+	public static void /*ListView<String>*/ Display(String title, String message){
 		Stage window = new Stage();
 		
 		window.initModality(Modality.APPLICATION_MODAL);	// blocks other window interaction until you deal with this one
 		window.setTitle(title);
 		window.setMinWidth(300);
-		window.setMinHeight(600);
+		window.setMinHeight(300);
 		Label label = new Label(message);
-//-------------------------------------------------------------------------------------------------------					
-		TreeItem<String> root, xWing, yWing;					// creating the root item and other items/branches
-		root = new TreeItem<>();
-		root.setExpanded(true);										// expanded from the start
+//-------------------------------------------------------------------------------------------------------				
+		TreeView<String> tree = new TreeView<>();		// creating new TreeView
+		TreeItem<String> root, ships, upgrades;			// creating items of the type TreeItem<String>
+	//root
+		root = new TreeItem<>();		// establishing that root is a new TreeItem
+		root.setExpanded(true);			// expanded by deafault
+	//ships
+		ships = makeBranch("Ships", root);		//creating branches with a custom makeBranch method that returns a TreeItem<String>
+		makeBranch("TIE Fighter", ships);
+		makeBranch("TIE Advanced", ships);
+	//upgrades
+		upgrades = makeBranch("Upgrades", root);
 		
-		xWing = makeBranch("X-Wing", root);
-		makeBranch("Luke Skywalker", xWing);
-		makeBranch("Wedge Antilles", xWing);
-		makeBranch("Red Squadron Pilot", xWing);
-		
-		yWing = makeBranch("Y-Wing", root);
-		makeBranch("Horton Salm", yWing);
-		makeBranch("\"Dutch\" Vander", yWing);
-		
-		TreeView<String> tree = new TreeView<String>(root);			// creating the tree with a specified root item
-		tree.setShowRoot(false);										// doesn't show the root
-		tree.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue)-> {	// when an action (button click) is made, the chosen item gets set to the static value
+		makeBranch("Elite", upgrades);
+		makeBranch("Astromech", upgrades);
+		makeBranch("Crew", upgrades);
+	//create tree
+		tree = new TreeView<String>(root);
+		tree.setShowRoot(false);			// doesn't show the root
+		tree.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue)-> {
 			treeItemSelected = newValue.getValue().toString();
 		});
+//-------------------------------------------------------------------------------------------------------	
+		TreeView<String> squad = new TreeView<>();		// creating new TreeView
+		TreeItem<String> root2;			// creating items of the type TreeItem<String>
+	//root
+		root2 = new TreeItem<>();		// establishing that root is a new TreeItem
+		root2.setExpanded(true);			// expanded by deafault
+	//ships
+		ships = makeBranch("Ships", root2);		//creating branches with a custom makeBranch method that returns a TreeItem<String>
+		makeBranch("X-wing", root2);
+		makeBranch("Y-wing", root2);
+
+	//create tree
+		tree = new TreeView<String>(root2);
+		tree.setShowRoot(false);			// doesn't show the root
+		tree.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue)-> {
+			treeItemSelected = newValue.getValue().toString();
+		});
+		
+		
+		
 //-------------------------------------------------------------------------------------------------------		
-		ListView<String> listView = new ListView<>();				// creating a list
+		ListView<String> listView = new ListView<>();
 		//listView.getItems().addAll("Rebels", "Imperials", "Scum");
-		listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		//listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		listView.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue)-> {
 			listItemSelected = newValue;
 		});
@@ -53,13 +76,13 @@ public class RebelWindow {
 		Button addButton = new Button("Add");		// creating a button with 2 functions
 		addButton.setOnAction(e-> 
 		{
-			listView.getItems().addAll(treeItemSelected);	// gets the current static value, depending on what was last clicked, and adds it to the list
+			listView.getItems().addAll(treeItemSelected);			
 		});	
 //-------------------------------------------------------------------------------------------------------		
 		Button removeButton = new Button("Remove");		// creating a button with 2 functions
 		removeButton.setOnAction(e-> 
 		{
-			listView.getItems().remove(listItemSelected);	// gets the current static value, depending on what was last clicked, and removes it from the list
+			listView.getItems().remove(listItemSelected);
 		});
 //-------------------------------------------------------------------------------------------------------				
 		VBox mainLayout = new VBox(10);				// creating the layout

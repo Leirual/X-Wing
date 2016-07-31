@@ -26,11 +26,11 @@ import javafx.stage.Stage;
 //-------------------------------------------------------------------------------------------------------		
 public class FactionWindow {
 
-	static String faction = "coś";
-	String item;
+	/*static String faction = "coś";
+	String item;*/
 	
 //-------------------------------------------------------------------------------------------------------			
-	public static void /*String*/ Display(String title, String message){
+	public static void /*String*/ Display(String title, String message){	// the main method for displaying the entire window
 		Stage window = new Stage();
 		
 		window.initModality(Modality.APPLICATION_MODAL);	// blocks other window interaction until you deal with this one
@@ -47,47 +47,45 @@ public class FactionWindow {
 		choice.getItems().add("Rebels");			// adding objects (or text) to the boxes
 		choice.getItems().add("Imperials");
 		choice.getItems().add("Scum");
-		choice.setValue("Rebels");					// default visible value
+		choice.setValue("none");					// default visible value
 		choice.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue)-> System.out.println(newValue));	//listening*/
 //-------------------------------------------------------------------------------------------------------		
-		ComboBox<String> comboBox;
-		comboBox = new ComboBox<>();
-		comboBox.getItems().addAll("Rebels", "Imperials", "Scum");
-		comboBox.setPromptText("Choose your faction!");
+		ComboBox<String> factionBox;
+		factionBox = new ComboBox<>();
+		factionBox.getItems().addAll("Rebels", "Imperials", "Scum");
+		factionBox.setPromptText("Choose your faction!");
+		factionBox.setValue("none");				// setting the default value for the box
 		
-		comboBox.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue)-> System.out.println(newValue));
-		comboBox.setOnAction(e-> System.out.println("User selected " + comboBox.getValue()));		// same as above
+		//factionBox.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue)-> System.out.println(newValue));	// printing the selection
+		//factionBox.setOnAction(e-> System.out.println("User selected " + factionBox.getValue()));		// same as above
 //-------------------------------------------------------------------------------------------------------
 		Button nextButton = new Button("Next");		// creating a button with 2 functions
 		nextButton.setOnAction(e->{
-			getFaction(comboBox);					// do the getFaction method and close the window, setting the faction variable
-			window.close();
+			getFaction(factionBox);					// do the getFaction method and close the window, setting the faction variable
+			//window.close();
 		});	
 //-------------------------------------------------------------------------------------------------------		
-		
-		
 		VBox mainLayout = new VBox(10);				// creating the layout
-		mainLayout.getChildren().addAll(label, /*tree,*/ comboBox,  /*listView,*/ /*choice, rebels, imperials, scum,*/ nextButton);
+		mainLayout.getChildren().addAll(label, /*tree,*/ factionBox,  /*listView,*/ /*choice, rebels, imperials, scum,*/ nextButton);
 		mainLayout.setAlignment(Pos.CENTER);				
 		Scene factionScene = new Scene(mainLayout, 200, 200);
 //-------------------------------------------------------------------------------------------------------				
 		window.setScene(factionScene);
 		window.showAndWait();	
-	
-		//return faction;								// the whole window method returns the "faction" value, set by the getChoice method bellow
 	}
 //-------------------------------------------------------------------------------------------------------		
+// FUNCTION FOR CHECKING WHICH FACTION WAS CHOSEN AND LAUNCHING THE APROPRIATE WINDOW OR ERROR
 	private static void getFaction(ComboBox<String> comboBox){
 		if(comboBox.getValue().equals("Rebels")){
 			RebelWindow.Display("Rebel Window", "Choose your forces");
 		}
 		else if(comboBox.getValue().equals("Imperials")){
-			faction = "imperials";
+			ImperialWindow.Display("Imperial Window", "Choose your forces");
 		}
 		else if(comboBox.getValue().equals("Scum")){
-			faction = "scum";
+			ScumWindow.Display("Scum Window", "Choose your forces");
 		}
-		else if(comboBox.getSelectionModel().getSelectedIndex() == -1){
+		else if(comboBox.getValue().equals("none"))/*(comboBox.getSelectionModel().getSelectedIndex() == -1)*/{
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Warning");
             alert.setHeaderText("Login");
@@ -96,12 +94,5 @@ public class FactionWindow {
 		}
 	}
 	
-	// creating tree branches
-	public static TreeItem<String> makeBranch(String name, TreeItem<String> parent){
-		TreeItem<String> item = new TreeItem<String>(name);
-		item.setExpanded(true);
-		parent.getChildren().add(item);
-		return item;		
-	}
 
 }

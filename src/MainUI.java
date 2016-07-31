@@ -64,10 +64,11 @@ public class MainUI extends Application{
 		Label buildListImperial = new Label("Build your Imperial list");
 		Label buildListScum = new Label("Build your Scum list");
 //-------------------------------------------------------------------------------------------------------			
+// NEW GAME BUTTON		
 		newGameButton = new Button("New Game");			// creating something to click :) - you can define it straight away in the brackets or define it in a setText method
 		newGameButton.setOnAction(new EventHandler<ActionEvent>() {	// an anonymous inner class for handling events corresponding to this button (otherwise it should only be THIS in the bracket)
 			public void handle(ActionEvent event){
-				FactionWindow.Display("New Game", "Choose your faction");
+				FactionWindow.Display("New Game", "Choose your faction");	// goes to a new window
 			}
 		});
 //-------------------------------------------------------------------------------------------------------
@@ -144,13 +145,6 @@ public class MainUI extends Application{
 				stage.setScene(saveScene);
 			}
 		});
-//-------------------------------------------------------------------------------------------------------			
-/*		button4 = new Button("Return to Main Menu");
-		button4.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent event){
-				stage.setScene(scene1);
-			}
-		});*/
 //-------------------------------------------------------------------------------------------------------		
 		backFromLoadButton = new Button("Return to Main Menu");
 		backFromLoadButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -166,7 +160,8 @@ public class MainUI extends Application{
 			}
 		});
 //-------------------------------------------------------------------------------------------------------				
-		newWindowButton = new Button("Open new window");
+// A NEW WINDOW BUTTON THAT CHANGES THE MAIN TITLE
+		newWindowButton = new Button("Change window title");
 		newWindowButton.setOnAction(e-> {
 			boolean result = ConfirmBox.Display("I'm a box!", "Are you smart enough?");
 			if(result==true){
@@ -177,9 +172,11 @@ public class MainUI extends Application{
 			}
 		});
 //-------------------------------------------------------------------------------------------------------		
+// CLOSING PROGRAM BUTTON
 		closeButton = new Button("Close");
-		closeButton.setOnAction(e->closeProgram());
+		closeButton.setOnAction(e->closeProgram());		// executes the closeProgram method
 //-------------------------------------------------------------------------------------------------------		
+// CREATING THE FIRST SCENE - LOGIN SCREEN		
 		GridPane grid = new GridPane();				// making a GridPane login screen
 		grid.setPadding(new Insets(20,10,0,10));
 		grid.setVgap(5);
@@ -196,7 +193,7 @@ public class MainUI extends Application{
 		{
 			String loginString = loginInput.getText();			// checking to see if the login and password are correct
 			String passwordString = passwordInput.getText();
-			if(loginString.toLowerCase().equals("k") && passwordString.equals("a")){
+			if(loginString.toLowerCase().equals("k") && passwordString.equals("s")){
 				stage.setScene(mainScene);
 			}
 			else{												// creating an error box
@@ -209,7 +206,7 @@ public class MainUI extends Application{
 		});
 		Label label1 = new Label("Welcome " + loginInput.getText() + ", man!");		// LABEL is a text the user can't interact with
 		
-		GridPane.setConstraints(login, 0, 0);		// creating a gridpane - must be accessed in a static way (through the class, not the object)
+		GridPane.setConstraints(login, 0, 0);		// setting elements on a gridpane - must be accessed in a static way (through the class, not the object)
 		GridPane.setConstraints(loginInput, 1, 0);
 		GridPane.setConstraints(password, 0, 1);
 		GridPane.setConstraints(passwordInput, 1, 1);
@@ -218,6 +215,7 @@ public class MainUI extends Application{
 		
 		loginScene = new Scene(grid, 400, 400);
 //-------------------------------------------------------------------------------------------------------			
+// CREATING THE MAIN SCENE AFTER LOGING IN		
 		VBox leftMenu = new VBox(20);		// a layout that stacks things one on top of another with a spacing
 		leftMenu.getChildren().addAll(newGameButton, loadGameButton, saveGameButton);		// adding a "child" to the "stage" (a button to the window layout)
 		
@@ -242,25 +240,27 @@ public class MainUI extends Application{
 		scumLayout.getChildren().addAll(buildListScum);		
 		scumScene = new Scene(scumLayout, 400, 200);
 //-------------------------------------------------------------------------------------------------------		
+// CREATING THE LOAD SCENE		
 		VBox layout3 = new VBox(5);
 		layout3.getChildren().addAll(label3, backFromLoadButton);
 		loadScene = new Scene(layout3, 500, 50);
 //-------------------------------------------------------------------------------------------------------		
+// CREATING THE SAVE SCENE		
 		VBox layout4 = new VBox(5);
 		layout4.getChildren().addAll(label4, backFromSaveButton);
 		saveScene = new Scene(layout4, 500, 500);
 //-------------------------------------------------------------------------------------------------------	
-		mainWindow.setScene(loginScene);		// setting up the main window
+		mainWindow.setScene(loginScene);		// setting up the main window - the first visible scene will be the login one
 		mainWindow.setTitle("X-wing miniatures game");
-		mainWindow.setOnCloseRequest(e-> {
+		mainWindow.setOnCloseRequest(e-> {		// action on pressing the X button
 			e.consume();				// taking care of a java event on our own (stopping it from continuing)
-			closeProgram();
+			closeProgram();				// launching our own function (which saves before exiting)
 		});
-		mainWindow.show();	
+		mainWindow.show();		// TADA! :)
 	}
 
 //-------------------------------------------------------------------------------------------------------		
-	private void closeProgram() {		// method for saving before close and closing
+	private void closeProgram() {		// method for saving before close and then closing
 		boolean answer = ConfirmBox.Display("EXIT Window", "Are you sure you want to exit?");
 		if(answer == true){
 			saveCount++;
